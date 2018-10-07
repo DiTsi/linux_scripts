@@ -1,0 +1,19 @@
+#!/bin/bash
+
+DEST=$1
+
+case "$DEST" in
+	'up')
+		xbacklight -inc 8 -time 0 && dunstify -t 500 "Brightness:" "$(printf "%2.0f" $(xbacklight))%" -r 216
+	;;
+
+	'down')
+		xbacklight -dec 8 -time 0 && dunstify -t 500 "Brightness:" "$(printf "%2.0f" $(xbacklight))%" -r 216
+	;;
+
+	*)
+		exit
+	;;
+esac
+
+exit
