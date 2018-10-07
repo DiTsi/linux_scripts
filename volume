@@ -1,0 +1,74 @@
+#!/bin/bash
+
+DEST=$1
+DRIVER=$2
+if [ $DRIVER = 'alsa' ]; then
+	CUR_STATE=$(amixer get Master | egrep 'Playback.*?\[o' | egrep -o '\[o.+\]' | sed 's/\[// ; s/\]//')
+else
+	temp=$(pamixer --get-mute)
+	if [ $temp = 'false' ]; then
+		CUR_STATE="on"
+	else
+		CUR_STATE="off"
+	fi
+fi
+
+case "$DEST" in
+	'up')
+		if [ $DRIVER = 'alsa' ]; then
+			if [ $CUR_STATE = 'off' ]; then
+				amixer -D pulse sset Master,0 2%+ && notify-send -t 500 "Volume:" "`amixer get Master,0|tail -n1|sed -r 's/.*\[(.*)%\].*/\1/'`% [mute]"
+			else
+				amixer -D pulse sset Master,0 2%+ && notify-send -t 500 "Volume:" "`amixer get Master,0|tail -n1|sed -r 's/.*\[(.*)%\].*/\1/'`%"
+			fi
+		fi
+
+		if [ $DRIVER = 'pulse' ]; then
+			if [ $CUR_STATE = 'off' ]; then
+				pamixer -i 2 && notify-send -t 500 "Volume:" "`pamixer --get-volume`% [mute]"
+			else
+				pamixer -i 2 && notify-send -t 500 "Volume:" "`pamixer --get-volume`%"
+			fi
+		fi
+	;;
+
+	'down')
+		if [ $DRIVER = 'alsa' ]; then
+			if [ $CUR_STATE = 'off' ]; then
+				amixer -D pulse sset Master,0 2%- && notify-send -t 500 "Volume:" "`amixer get Master,0|tail -n1|sed -r 's/.*\[(.*)%\].*/\1/'`% [mute]"
+			else
+				amixer -D pulse sset Master,0 2%- && notify-send -t 500 "Volume:" "`amixer get Master,0|tail -n1|sed -r 's/.*\[(.*)%\].*/\1/'`%"
+			fi
+		fi
+
+		if [ $DRIVER = 'pulse' ]; then
+			if [ $CUR_STATE = 'off' ]; then
+				pamixer -d 2 && notify-send -t 500 "Volume:" "`pamixer --get-volume`% [mute]"
+			else
+				pamixer -d 2 && notify-send -t 500 "Volume:" "`pamixer --get-volume`%"
+			fi
+		fi
+	;;
+	
+	'mute')
+		if [ $DRIVER = 'alsa' ]; then
+			amixer -D pulse sset Speaker mute
+			amixer -D pulse sset Master mute && notify-send -t 500 "Volume:" "[mute]"
+		fi
+		if [ $DRIVER = 'pulse' ]; then
+			pamixer -m && dundunst		stify -t 500 "Volume:" "[mute]"
+		fi
+	;;
+	
+	'unmute')
+		if [ $DRIVER = 'alsa' ]; then
+			amixer -D pulse -D pulse sset Speaker unmute
+			amixer -D pulse sset Master unmute && notify-send -t 500 "Volume:" "[unmute]"
+		fi
+		if [ $DRIVER = 'pulse' ]; then
+			pamixer -u && notify-send -t 500 "Volume:" "[unmute]"
+		fi
+	;;
+esac
+
+exit

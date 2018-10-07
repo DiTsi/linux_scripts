@@ -71,4 +71,4 @@ case "$DEST" in
 	;;
 esac
 
-exit
+exit 0
