@@ -1,6 +1,7 @@
 #!/bin/bash
 
-EDITOR=vim
+EDITOR=gvim
+PC=$1
 
 while :
 do
@@ -99,7 +100,14 @@ do
 				;;
 			esac
 		;;
-		"p"|"з") $EDITOR ~/life/passws.txt;;
+		"p"|"з")
+			if [ "$PC" == "work" ]; then
+				$EDITOR ~/pass.vim
+			else
+				$EDITOR ~/life/passws.txt
+			fi
+                         
+		;;
 		"r"|"к") sudo $EDITOR /usr/scripts/interface;;
 		"u"|"г") fluxbox-update_configs;;
 		"y"|"н")

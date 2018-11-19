@@ -2,7 +2,11 @@
 
 
 NUM=1
-DIR=~/temp
+if [ "$1" == "work" ]; then
+	DIR=~/temp
+else
+	DIR=~/temp
+fi
 
 
 while :; do
