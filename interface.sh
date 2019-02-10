@@ -97,12 +97,12 @@ case $vybor in
 			;;
 		esac
 	;;
-	"p"|"з") $EDITOR ~/life/passws.txt;;
+	"p"|"з") $EDITOR ~/administration/passws.txt;;
 	"r"|"к")
 		if test "$2" == "work"; then
 			exit 0
 		else
-			$EDITOR ~/distrib/Linux/scripts/interface.sh
+			gvim ~/distrib/Linux/scripts/interface.sh
 		fi
 	;;
 	"u"|"г") fluxbox-update_configs;;

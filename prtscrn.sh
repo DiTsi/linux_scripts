@@ -5,7 +5,7 @@ NUM=1
 if [ "$1" == "work" ]; then
 	DIR=~/temp
 else
-	DIR=~/temp
+	DIR=~/screenshots
 fi
 
 
